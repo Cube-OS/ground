@@ -65,14 +65,14 @@ pub fn ground_handle(tokens: TokenStream) -> TokenStream {
             i = i+1;
         }    
         stream.extend::<TokenStream2>(quote!(
-            let cmd = match Command::<CommandID,(#cmd_stream)>::serialize(CommandID::#id,(#arg_stream)) {
+            let cmd = match Command::to_vec(&#id(#arg_stream)) {
                 Ok(cmd) => cmd,
                 Err(e) => return serde_json::to_string_pretty(&e).unwrap(),
             };
         ))
     } else {
         stream.extend::<TokenStream2>(quote!{
-            let cmd = match Command::<CommandID,()>::serialize(CommandID::#id,()) {
+            let cmd = match Command::to_vec(&#id) {
                 Ok(cmd) => cmd,
                 Err(e) => return serde_json::to_string_pretty(&e).unwrap(),
             };
